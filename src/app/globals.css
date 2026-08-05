@@ -47,6 +47,7 @@
   --color-neutral: #d1b2a1;
 
   /* Type scale — see base/DESIGN.md */
+  --text-display-xl: 248px;
   --text-display-lg: 48px;
   --text-display-lg--line-height: 1.1;
   --text-display-lg--letter-spacing: -0.02em;
