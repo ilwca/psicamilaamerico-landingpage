@@ -61,6 +61,8 @@ export function Hero() {
 
   const cueOpacity = useTransform(scrollYProgress, [0, 0.08, 1], [1, 0, 0]);
 
+  const sideListY = useTransform(scrollYProgress, [0, 0.2], [0, -24]);
+
   return (
     <section ref={wrapperRef} className="relative h-[300vh]">
       <div className="sticky top-0 h-screen w-full overflow-hidden isolate">
@@ -143,6 +145,20 @@ export function Hero() {
           <HeroCopy />
         </motion.div>
 
+        {/* Right-edge highlight list — desktop only. At wide viewports the
+            centered max-w-1140px copy container leaves the whole right
+            side of the screen bare (the headline sits left-of-center and
+            the photo behind it carries no text of its own); this fills it,
+            vertically centered, mirroring where the headline sits on the
+            left. Fades on the same schedule as the copy layer since it has
+            nothing to say once that copy is gone. */}
+        <motion.div
+          style={{ opacity: textOpacity, y: sideListY }}
+          className="pointer-events-none absolute right-6 top-1/2 z-10 hidden -translate-y-1/2 lg:right-12 lg:block xl:right-16"
+        >
+          <HeroHighlights />
+        </motion.div>
+
         {/* Scroll cue */}
         <motion.div
           style={{ opacity: cueOpacity }}
@@ -176,7 +192,35 @@ function HeroCopy() {
       <p className="mt-5 max-w-md lg:ml-95 font-body text-body-lg text-inverse-on-surface/90">
         PSICOLÓGA CLÍNICA.
       </p>
-      
+
     </motion.div>
+  );
+}
+
+// Placeholder like the rest of the site's copy (see CLAUDE.md's Content
+// notes) — confirm the real three highlights with Camila before launch.
+const HERO_HIGHLIGHTS = [
+  "Atendimento online",
+  "Atendimento presencial",
+  "Sigilo profissional",
+];
+
+function HeroHighlights() {
+  return (
+    <motion.ul
+      initial={{ opacity: 0, x: -16 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.9, delay: 0.3, ease: "easeOut" }}
+      className="flex flex-col gap-5 border-r border-inverse-on-surface/30 pr-5 text-inverse-on-surface [text-shadow:0_2px_20px_rgba(41,24,13,0.55)]"
+    >
+      {HERO_HIGHLIGHTS.map((item) => (
+        <li
+          key={item}
+          className="font-body text-label-lg uppercase tracking-[0.05em] text-inverse-on-surface/90"
+        >
+          {item}
+        </li>
+      ))}
+    </motion.ul>
   );
 }
