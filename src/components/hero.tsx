@@ -8,8 +8,12 @@ import { motion, useScroll, useTransform } from "framer-motion";
  * The hero photo has no baked-in text/logo — those are real layers animated
  * here. As the user scrolls through this section's extra scroll-room, the
  * photo fades out, the brand mark scales up from a small accent into an
- * abstract full-bleed texture, and the copy fades early — mirroring the
- * zoom-into-the-logo storyboard in base/hero-1.jpg..hero-6.png.
+ * abstract shape while fading back out, the warm tint scrim dissolves, and
+ * the copy fades early — mirroring the zoom-into-the-logo storyboard in
+ * base/hero-1.jpg..hero-6.png. Everything decays toward nothing by the end
+ * of the scroll range, uncovering a flat `secondary-container` base layer
+ * instead of building up into a heavy dark field — that light tone is the
+ * seam Sobre picks up from.
  *
  * Every scroll-linked opacity keyframe list is written to explicitly reach
  * input `1`. framer-motion mishandles opacity `useTransform`s whose input
@@ -36,8 +40,8 @@ export function Hero() {
 
   const tintOpacity = useTransform(
     scrollYProgress,
-    [0, 0.5, 1],
-    [0.32, 0.6, 0.96],
+    [0, 0.35, 0.7, 1],
+    [0.32, 0.42, 0.12, 0],
   );
 
   const logoScale = useTransform(
@@ -47,8 +51,8 @@ export function Hero() {
   );
   const logoOpacity = useTransform(
     scrollYProgress,
-    [0, 0.15, 1],
-    [0.6, 0.9, 1],
+    [0, 0.15, 0.6, 1],
+    [0.6, 0.9, 0.35, 0],
   );
   const logoRotate = useTransform(scrollYProgress, [0, 1], [0, 14]);
 
@@ -60,6 +64,12 @@ export function Hero() {
   return (
     <section ref={wrapperRef} className="relative h-[300vh]">
       <div className="sticky top-0 h-screen w-full overflow-hidden isolate">
+        {/* Resting base: once the photo, tint and logo have all faded out,
+            this flat light tone is what's left — the seam Sobre picks up
+            from, instead of the heavy dark field the tint used to build
+            toward. */}
+        <div className="absolute inset-0 bg-secondary-container" />
+
         {/* Photo layer */}
         <motion.div
           style={{ scale: photoScale, opacity: photoOpacity }}
@@ -85,17 +95,23 @@ export function Hero() {
           </picture>
         </motion.div>
 
-        {/* Warm tint that darkens the photo then becomes the dominant field
-            the logo texture emerges from, bridging into the next section. */}
+        {/* Warm tint that darkens the photo for legibility while it's still
+            visible, then dissolves — rather than building up into a heavy
+            dark field — so the section settles into the flat light base
+            layer above, which is what Sobre now seams against. */}
         <motion.div
           style={{ opacity: tintOpacity }}
           className="absolute inset-0 bg-gradient-to-t from-on-surface via-tertiary/70 to-primary-container/40"
         />
 
-        {/* Static scrim, independent of scroll: keeps the copy legible
-            against the bright photo from the very first frame, mirroring
-            the left-heavy overlay in base/hero-1.jpg. */}
-        <div className="absolute inset-0 bg-gradient-to-r from-on-surface/60 via-on-surface/20 to-transparent" />
+        {/* Left-heavy scrim, mirroring base/hero-1.jpg: keeps the copy
+            legible against the bright photo from the very first frame, then
+            fades out on the same schedule as the copy it exists to serve —
+            it has no reason to linger once there's no text left to read. */}
+        <motion.div
+          style={{ opacity: textOpacity }}
+          className="absolute inset-0 bg-gradient-to-r from-on-surface/60 via-on-surface/20 to-transparent"
+        />
 
         {/* Brand mark — scales from a small accent into an abstract,
             frame-filling texture. Sits below the copy layer's z-10 so the

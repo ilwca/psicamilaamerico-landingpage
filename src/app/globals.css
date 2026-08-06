@@ -46,6 +46,32 @@
 
   --color-neutral: #d1b2a1;
 
+  /* "Fixed" roles — stay constant regardless of theme, used for accent
+     blobs/glows and on-primary CTA copy (see style/DESIGN.md frontmatter). */
+  --color-primary-fixed: #ffdbc9;
+  --color-primary-fixed-dim: #ffb68c;
+  --color-on-primary-fixed: #321200;
+  --color-on-primary-fixed-variant: #6d3916;
+
+  --color-secondary-fixed: #fddcca;
+  --color-secondary-fixed-dim: #e0c0af;
+  --color-on-secondary-fixed: #29180d;
+  --color-on-secondary-fixed-variant: #584235;
+
+  --color-tertiary-fixed: #ffdbcf;
+  --color-tertiary-fixed-dim: #ffb59a;
+  --color-on-tertiary-fixed: #370e01;
+  --color-on-tertiary-fixed-variant: #6e3823;
+
+  /* Accent tones for glass/blob treatment — see style/DESIGN.md */
+  --color-deep-earth: #47240d;
+  --color-muted-clay: #7c5246;
+  --color-soft-parchment: #fdf9f6;
+
+  /* Diffuse, deep-earth-tinted shadows — replaces sharp/neutral-gray shadows */
+  --shadow-soft: 0 20px 60px -15px rgba(71, 36, 13, 0.18);
+  --shadow-glow: 0 8px 32px 0 rgba(71, 36, 13, 0.08);
+
   /* Type scale — see base/DESIGN.md */
   --text-display-xl: 248px;
   --text-display-lg: 48px;
@@ -86,4 +112,41 @@ body {
   background: var(--color-surface);
   color: var(--color-on-surface);
   font-family: var(--font-body), sans-serif;
+}
+
+/* Refined Organicism — glassmorphism, blobs, pills (style/DESIGN.md).
+   Applies to every section except Hero, which keeps its original flatter
+   treatment from base/DESIGN.md. */
+
+@utility glass-card {
+  background: color-mix(in srgb, var(--color-surface-container-lowest) 62%, transparent);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-glow);
+  border: 1px solid color-mix(in srgb, var(--color-outline-variant) 50%, transparent);
+}
+
+@utility glass-card-dark {
+  background: color-mix(in srgb, var(--color-inverse-surface) 55%, transparent);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid color-mix(in srgb, var(--color-inverse-on-surface) 12%, transparent);
+}
+
+@utility blob-shape {
+  border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+  animation: blob-morph 10s ease-in-out infinite;
+}
+
+@keyframes blob-morph {
+  0%,
+  100% {
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+  }
+  34% {
+    border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%;
+  }
+  67% {
+    border-radius: 45% 55% 65% 35% / 55% 45% 55% 45%;
+  }
 }
