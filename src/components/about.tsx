@@ -62,12 +62,6 @@ export function Sobre() {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="relative order-1 lg:order-2 lg:col-span-5"
         >
-          {/* Organic blob accent bleeding behind the portrait. */}
-          <div
-            aria-hidden="true"
-            className="blob-shape pointer-events-none absolute -inset-10 -z-10 bg-primary-fixed/50 sm:-inset-14"
-          />
-
           {/* Brand-mark echo, tying back to the Hero's brand-mark motif. */}
           <div
             aria-hidden="true"
@@ -81,9 +75,10 @@ export function Sobre() {
             />
           </div>
 
-          <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] shadow-soft">
+          {/* Portrait sits directly in the animated-border blob shape. */}
+          <div className="blob-shape relative aspect-[4/5] overflow-hidden shadow-soft">
             <Image
-              src="/images/hero-square.jpg"
+              src="/images/about-mobile.jpg"
               alt="Camila Américo, psicóloga clínica"
               fill
               sizes="(max-width: 1024px) 100vw, 40vw"
@@ -99,7 +94,7 @@ export function Sobre() {
             viewport={{ once: true, amount: 0.4 }}
             variants={fadeUp}
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-            className="glass-card absolute -bottom-6 -left-6 z-10 flex items-center gap-4 rounded-2xl p-6 sm:-bottom-8 sm:-left-8"
+            className="glass-card absolute -bottom-6 -left-6 z-10 flex items-center gap-4 rounded-full p-6 sm:-bottom-8 sm:-left-8"
           >
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-tertiary-container font-display text-headline-sm text-on-tertiary-container">
               M.
@@ -159,7 +154,7 @@ export function Sobre() {
             ))}
           </ul>
 
-          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {/* <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
             {HIGHLIGHTS.map((item) => (
               <div
                 key={item.title}
@@ -173,10 +168,10 @@ export function Sobre() {
                 </p>
               </div>
             ))}
-          </div>
+          </div> */}
 
           <p className="mt-8 font-body text-label-md uppercase tracking-[0.05em] text-on-surface-variant/60">
-            CRP 00/00000
+            CRP 23/1313
           </p>
         </motion.div>
       </div>
