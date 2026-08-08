@@ -80,14 +80,14 @@ export function Hero() {
           <picture>
             <source
               media="(max-width: 640px)"
-              srcSet="/images/hero-mobile.jpg"
+              srcSet="/images/hero-mobile.webp"
             />
             <source
               media="(max-width: 1024px)"
-              srcSet="/images/hero-square.jpg"
+              srcSet="/images/hero-square.webp"
             />
             <Image
-              src="/images/hero-desktop.jpg"
+              src="/images/hero-desktop.webp"
               alt="Camila Américo, psicóloga clínica, sentada em um ambiente sereno e iluminado"
               fill
               priority
