@@ -126,7 +126,7 @@ export function Hero() {
             opacity: logoOpacity,
             rotate: logoRotate,
           }}
-          className="absolute left-[-0.84%] top-0 w-[50.24%] aspect-[926/937]"
+          className="absolute left-[-0.84%] translate-y-3/4 sm:translate-y-0 w-[50.24%] aspect-[926/937]"
         >
           <Image
             src="/images/logo-mark.svg"
@@ -185,7 +185,7 @@ function HeroCopy() {
       {/* <p className="font-body text-label-lg uppercase tracking-[0.05em] text-inverse-on-surface/85">
         Psicóloga Clínica · Mestra em Psicologia
       </p> */}
-      <h1 className="mt-3 -ml-8 sm:-ml-16 lg:-ml-84 font-display text-headline-lg-mobile leading-[0.40] text-inverse-on-surface sm:text-display-xl">
+      <h1 className="mt-3 -ml-4 sm:-ml-16 lg:-ml-84 font-display text-headline-lg-mobile leading-[0.40] text-inverse-on-surface sm:text-display-xl">
         <span className="block">Camila</span>
         <span className="block pl-0 sm:pl-[40%]">Américo</span>
       </h1>
