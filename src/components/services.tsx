@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion, type Variants } from "framer-motion";
 
 const SERVICES = [
@@ -33,7 +34,27 @@ const fadeUp: Variants = {
 
 export function Services() {
   return (
-    <section id="servicos" className="relative overflow-hidden bg-surface-container-low">
+    <section id="servicos" className="relative isolate overflow-hidden bg-surface-container-low">
+      <Image
+        src="/images/service-bg-mobile.webp"
+        alt=""
+        aria-hidden="true"
+        fill
+        sizes="100vw"
+        className="pointer-events-none -z-20 object-cover sm:hidden"
+      />
+      <Image
+        src="/images/service-bg.webp"
+        alt=""
+        aria-hidden="true"
+        fill
+        sizes="100vw"
+        className="pointer-events-none -z-20 hidden object-cover sm:block"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10 bg-surface-container-low/55"
+      />
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -left-40 top-1/3 -z-10 h-[420px] w-[420px] rounded-full bg-secondary-container/50 blur-[100px]"
