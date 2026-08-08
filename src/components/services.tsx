@@ -51,7 +51,7 @@ export function Services() {
           <p className="font-body text-label-lg uppercase tracking-[0.05em] text-primary">
             Atendimento
           </p>
-          <h2 className="mt-3 font-display text-headline-lg-mobile leading-[1.2] text-on-surface sm:text-headline-lg">
+          <h2 className="mt-3 font-display text-headline-lg-mobile-secundary leading-[1.2] text-on-surface sm:text-headline-lg">
             Um espaço para cada momento da sua jornada
           </h2>
         </motion.div>

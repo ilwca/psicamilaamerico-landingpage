@@ -1,5 +1,17 @@
 @import "tailwindcss";
 
+@property --glow-x {
+  syntax: "<length-percentage>";
+  inherits: true;
+  initial-value: 50%;
+}
+
+@property --glow-y {
+  syntax: "<length-percentage>";
+  inherits: true;
+  initial-value: 50%;
+}
+
 :root {
   --background: #fff8f5;
   --foreground: #29180d;

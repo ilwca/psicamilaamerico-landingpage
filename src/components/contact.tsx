@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import { motion, type Variants } from "framer-motion";
 
 const fadeUp: Variants = {
@@ -14,9 +15,27 @@ const fadeUp: Variants = {
  * submissions, so a form would silently do nothing.
  */
 export function Contact() {
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    const card = cardRef.current;
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty("--glow-x", `${event.clientX - rect.left}px`);
+    card.style.setProperty("--glow-y", `${event.clientY - rect.top}px`);
+    card.style.setProperty("--glow-opacity", "1");
+  };
+
+  const handlePointerLeave = () => {
+    cardRef.current?.style.setProperty("--glow-opacity", "0");
+  };
+
   return (
     <section id="contato" className="bg-surface px-5 py-16 sm:px-10 lg:px-6 lg:py-32">
       <motion.div
+        ref={cardRef}
+        onPointerMove={handlePointerMove}
+        onPointerLeave={handlePointerLeave}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.4 }}
@@ -24,6 +43,16 @@ export function Contact() {
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="relative mx-auto max-w-[1000px] overflow-hidden rounded-[3rem] bg-primary px-8 py-16 text-center shadow-soft sm:px-16 sm:py-24"
       >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 opacity-[var(--glow-opacity,0)]"
+          style={{
+            background:
+              "radial-gradient(400px circle at var(--glow-x, 50%) var(--glow-y, 50%), color-mix(in oklab, var(--color-primary-fixed) 35%, transparent), transparent 70%)",
+            transition:
+              "opacity 500ms ease, --glow-x 700ms cubic-bezier(0.16, 1, 0.3, 1), --glow-y 700ms cubic-bezier(0.16, 1, 0.3, 1)",
+          }}
+        />
         <div
           aria-hidden="true"
           className="pointer-events-none absolute -top-32 -left-32 h-96 w-96 rounded-full bg-primary-fixed/20 blur-[80px]"
