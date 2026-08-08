@@ -187,9 +187,9 @@ function HeroCopy() {
       </p> */}
       <h1 className="mt-3 -ml-8 sm:-ml-16 lg:-ml-84 font-display text-headline-lg-mobile leading-[0.40] text-inverse-on-surface sm:text-display-xl">
         <span className="block">Camila</span>
-        <span className="block pl-[40%]">Américo</span>
+        <span className="block pl-0 sm:pl-[40%]">Américo</span>
       </h1>
-      <p className="mt-5 max-w-md lg:ml-95 font-body text-body-lg text-inverse-on-surface/90">
+      <p className="mt-5 max-w-md -ml-4 sm:ml-0 lg:ml-95 font-body text-body-lg text-inverse-on-surface/90">
         PSICOLÓGA CLÍNICA.
       </p>
 

@@ -37,7 +37,7 @@ export function Contact() {
           <p className="font-body text-label-lg uppercase tracking-[0.05em] text-primary-fixed">
             Vamos conversar
           </p>
-          <h2 className="mt-3 font-display text-headline-lg-mobile leading-[1.2] text-on-primary sm:text-headline-lg">
+          <h2 className="mt-3 font-display text-headline-lg-mobile-secundary leading-[1.2] text-on-primary sm:text-headline-lg">
             Dar o primeiro passo também é coragem
           </h2>
           <p className="mt-5 font-body text-body-lg text-primary-fixed-dim">

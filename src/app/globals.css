@@ -87,7 +87,8 @@
   --text-headline-sm: 22px;
   --text-headline-sm--line-height: 1.4;
 
-  --text-headline-lg-mobile: 30px;
+  --text-headline-lg-mobile: 80px;
+  --text-headline-lg-mobile-secundary: 40px;
   --text-headline-lg-mobile--line-height: 1.2;
 
   --text-body-lg: 18px;

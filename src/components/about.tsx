@@ -124,7 +124,7 @@ export function Sobre() {
               Sobre mim
             </p>
           </div>
-          <h2 className="mt-6 max-w-lg font-display text-headline-lg-mobile leading-[1.2] text-on-surface sm:text-headline-lg">
+          <h2 className="mt-6 max-w-lg font-display text-headline-lg-mobile-secundary leading-[1.2] text-on-surface sm:text-headline-lg">
             Cuidar da mente é um ato de coragem — e você não precisa fazer
             isso sozinha.
           </h2>
