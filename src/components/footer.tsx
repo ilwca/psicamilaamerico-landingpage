@@ -62,7 +62,7 @@ export function Footer() {
 
           <div className="flex flex-col items-center gap-2 sm:items-end">
             <a
-              href="https://wa.me/5500000000000"
+              href="https://wa.me/556384928550"
               target="_blank"
               rel="noopener noreferrer"
               className="font-body text-label-lg uppercase tracking-[0.05em] text-inverse-on-surface/80 transition hover:text-inverse-on-surface"
@@ -70,17 +70,24 @@ export function Footer() {
               WhatsApp
             </a>
             <a
-              href="mailto:contato@camilaamerico.com.br"
+              href="mailto:contato@psicamilaamerico.com.br"
               className="font-body text-label-lg uppercase tracking-[0.05em] text-inverse-on-surface/80 transition hover:text-inverse-on-surface"
             >
               E-mail
+            </a>
+            <a 
+              href="https://www.instagram.com/camilaamericopsi/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-body text-label-lg uppercase tracking-[0.05em] text-inverse-on-surface/80 transition hover:text-inverse-on-surface">
+              Instagram
             </a>
           </div>
         </div>
 
         <div className="mt-12 border-t border-inverse-on-surface/15 pt-6 text-center">
           <p className="font-body text-body-sm text-inverse-on-surface/60">
-            © {year} Camila Américo — Psicóloga Clínica · CRP 00/00000
+            © {year} Camila Américo — Psicóloga Clínica · CRP 23/1313
           </p>
         </div>
       </div>
