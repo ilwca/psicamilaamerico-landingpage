@@ -1,24 +1,33 @@
 "use client";
 
+import { useRef } from "react";
 import { motion, type Variants } from "framer-motion";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const STEPS = [
   {
     title: "Primeiro contato",
     description:
-      "Você entra em contato e agendamos, juntas, um horário que funcione para você.",
+      "Você entra em contato pelo WhatsApp ou e-mail e conta, em poucas palavras, o que te motivou a buscar esse cuidado. A partir daí, encontramos juntas um horário que caiba na sua rotina — sem pressa e sem burocracia.",
+    details: ["Resposta rápida", "Sem compromisso"],
     badgeClass: "bg-primary text-on-primary",
   },
   {
     title: "Sessão inicial",
     description:
-      "Conversamos sobre sua história, suas questões e o que te trouxe até aqui.",
+      "No primeiro encontro, o objetivo é te conhecer: sua história, o que te trouxe até aqui e o que você espera desse processo. É um espaço de escuta genuína, sem julgamentos — você define o ritmo da conversa.",
+    details: ["Online ou presencial", "Você define o ritmo"],
     badgeClass: "bg-tertiary text-on-tertiary",
   },
   {
     title: "Acompanhamento contínuo",
     description:
-      "Seguimos juntas, no seu ritmo, construindo novos caminhos com calma.",
+      "A partir daí, seguimos com sessões regulares, revisitando objetivos sempre que fizer sentido. O cuidado se adapta a cada fase da sua jornada, com calma e consistência, no seu tempo.",
+    details: ["No seu tempo", "Cuidado contínuo"],
     badgeClass: "bg-secondary text-on-secondary",
   },
 ];
@@ -36,8 +45,63 @@ const fadeUp: Variants = {
  * testimonials only once cleared with her professional/ethics review.
  */
 export function Process() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLOListElement>(null);
+
+  useGSAP(
+    () => {
+      const viewport = viewportRef.current;
+      const track = trackRef.current;
+      if (!viewport || !track) return;
+
+      // Pin + horizontal scrub now runs at every breakpoint, including
+      // mobile — the only thing that opts it out is prefers-reduced-motion,
+      // in which case it falls back to the plain vertical grid below. Every
+      // gsap.set()/tween created inside the callback below is automatically
+      // reverted the moment the condition stops matching, which restores
+      // the grid layout exactly as it was.
+      gsap.matchMedia().add(
+        {
+          noMotionPreference: "(prefers-reduced-motion: no-preference)",
+        },
+        (context) => {
+          const { noMotionPreference } = context.conditions ?? {};
+          if (!noMotionPreference) return;
+
+          // The flex/w-screen/overflow-hidden layout switch is handled by
+          // the `motion-safe:*` classes below (same condition this
+          // matchMedia checks), so each card is already a real 100vw slide
+          // and `track` is already a `w-max` row by the time this runs —
+          // GSAP only owns the scroll-scrubbed transform, not the layout.
+          const getScrollAmount = () =>
+            track.scrollWidth - viewport.clientWidth;
+
+          gsap.to(track, {
+            x: () => -getScrollAmount(),
+            ease: "none",
+            scrollTrigger: {
+              trigger: viewport,
+              start: "top top",
+              end: () => `+=${getScrollAmount()}`,
+              pin: true,
+              scrub: 1,
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
+            },
+          });
+        }
+      );
+    },
+    { scope: sectionRef }
+  );
+
   return (
-    <section id="processo" className="relative overflow-hidden bg-surface">
+    <section
+      id="processo"
+      ref={sectionRef}
+      className="relative w-full overflow-hidden bg-surface"
+    >
       <div
         aria-hidden="true"
         className="pointer-events-none absolute left-1/2 top-0 -z-10 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/3 rounded-full bg-tertiary-fixed/20 blur-[120px]"
@@ -67,50 +131,95 @@ export function Process() {
           </footer>
         </motion.blockquote>
 
-        <div className="mt-24 sm:mt-28">
-          <motion.p
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.4 }}
-            variants={fadeUp}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="text-center font-body text-label-lg uppercase tracking-[0.05em] text-primary"
-          >
-            Como funciona
-          </motion.p>
+        <motion.p
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.4 }}
+          variants={fadeUp}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="mt-24 text-center font-body text-label-lg uppercase tracking-[0.05em] text-primary sm:mt-28"
+        >
+          Como funciona
+        </motion.p>
+      </div>
 
-          <ol className="relative mt-12 grid grid-cols-1 gap-10 sm:grid-cols-3 sm:gap-8">
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute top-8 left-[15%] right-[15%] hidden h-px bg-outline-variant sm:block"
-            />
-
-            {STEPS.map((step, index) => (
-              <motion.li
-                key={step.title}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.4 }}
-                variants={fadeUp}
-                transition={{ duration: 0.8, ease: "easeOut", delay: index * 0.1 }}
-                className="glass-card relative rounded-[2rem] p-8 pt-12 text-center shadow-soft transition-transform duration-500 hover:-translate-y-2"
-              >
+      {/* Deliberately outside the mx-auto max-w-[1140px] wrapper above: the
+          pin/scrub math needs `viewport` and each slide to measure the real
+          viewport width (100vw), not the width of that centered, padded
+          container. `pb-16 lg:pb-32` stands in for the section padding this
+          part opted out of, so the overall vertical rhythm is unchanged. */}
+      <div ref={viewportRef} className="relative mt-12 w-full pb-16 motion-safe:overflow-hidden lg:pb-32">
+        <ol
+          ref={trackRef}
+          className="grid grid-cols-1 gap-16 motion-safe:flex motion-safe:w-max motion-safe:flex-nowrap motion-safe:gap-0"
+        >
+          {STEPS.map((step, index) => (
+            <motion.li
+              key={step.title}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.4 }}
+              variants={fadeUp}
+              transition={{
+                duration: 0.8,
+                ease: "easeOut",
+                delay: index * 0.1,
+              }}
+              className="flex min-h-[80dvh] w-full shrink-0 items-center justify-center motion-safe:w-screen motion-safe:px-5 sm:motion-safe:px-12 lg:motion-safe:px-56"
+            >
+              {/* Split from the <li> "slide": GSAP stretches the slide to
+                  the full pinned viewport width at every breakpoint (only
+                  reduced-motion opts out), but the visible card should stay
+                  capped and centered inside it — same reason min-h-[80dvh]
+                  lives here and not on the card itself, so a short card
+                  still centers inside a tall slide instead of stretching to
+                  fill it. `max-w-5xl` caps the card when the pin is inactive
+                  (reduced motion), where the slide isn't full-width anyway;
+                  when `motion-safe`, the slide's own responsive `px-*` is
+                  what controls the gap around the card, so the cap is
+                  lifted there to let the card fill that padded width —
+                  otherwise the two constraints would compound into a much
+                  wider empty margin than intended. */}
+              <div className="glass-card relative flex min-h-[55vh] w-full max-w-5xl flex-col items-center justify-center rounded-[3rem] p-10 pt-16 text-center shadow-soft transition-transform duration-500 hover:-translate-y-2 sm:min-h-[60vh] sm:p-14 sm:pt-20 lg:min-h-[65vh] lg:p-16 lg:pt-24 motion-safe:max-w-none">
                 <span
                   aria-hidden="true"
-                  className={`absolute -top-6 left-1/2 flex h-12 w-12 -translate-x-1/2 items-center justify-center rounded-full font-body text-label-lg shadow-soft ${step.badgeClass}`}
+                  className={`absolute -top-7 left-1/2 flex h-14 w-14 -translate-x-1/2 items-center justify-center rounded-full font-body text-label-lg shadow-soft sm:-top-8 sm:h-16 sm:w-16 sm:text-headline-sm lg:-top-10 lg:h-20 lg:w-20 lg:text-headline-md ${step.badgeClass}`}
                 >
                   {index + 1}
                 </span>
-                <h3 className="mt-2 font-display text-headline-sm text-on-surface">
+                <h3 className="mt-2 font-display text-headline-sm text-on-surface sm:text-headline-md lg:text-headline-lg">
                   {step.title}
                 </h3>
-                <p className="mt-2 font-body text-body-md text-on-surface-variant">
+                <p className="mx-auto mt-4 max-w-2xl font-body text-body-md text-on-surface-variant sm:text-body-lg">
                   {step.description}
                 </p>
-              </motion.li>
-            ))}
-          </ol>
-        </div>
+                <div className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:mt-8">
+                  {step.details.map((detail) => (
+                    <span
+                      key={detail}
+                      className="rounded-full bg-surface-container-high px-4 py-1.5 font-body text-label-md text-on-surface-variant sm:px-5 sm:py-2"
+                    >
+                      {detail}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </motion.li>
+          ))}
+          {/* Trailing spacer, not a step: extends the pinned track past the
+              last card so the scrub has extra vertical scroll distance to
+              consume after step 3 is fully in frame, before the pin
+              releases into the next section — without it, reaching the
+              last card and un-pinning happen in the same instant, which
+              reads as an abrupt cut. `hidden` outside `motion-safe` keeps
+              it out of the plain vertical stack entirely (no stray blank
+              block), since it only makes sense as extra horizontal scroll
+              distance in the pinned mode. */}
+          <li
+            aria-hidden="true"
+            className="hidden shrink-0 motion-safe:block motion-safe:w-[50vw]"
+          />
+        </ol>
       </div>
     </section>
   );
