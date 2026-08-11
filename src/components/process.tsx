@@ -69,6 +69,17 @@ export function Process() {
           const { noMotionPreference } = context.conditions ?? {};
           if (!noMotionPreference) return;
 
+          // Touch browsers drive scroll natively (compositor-threaded) and
+          // resize the viewport as the address bar shows/hides mid-scroll,
+          // both of which make GSAP's pin (which repositions the track on
+          // the main thread in response to scroll events) fall behind or
+          // lose its lock — the page keeps scrolling underneath instead of
+          // staying pinned. normalizeScroll funnels touch/wheel input
+          // through GSAP's own ticker instead, which is what makes the pin
+          // actually hold on mobile. Only enabled in this branch (and
+          // reverted below) since it's unnecessary overhead otherwise.
+          const normalizer = ScrollTrigger.normalizeScroll(true);
+
           // The flex/w-screen/overflow-hidden layout switch is handled by
           // the `motion-safe:*` classes below (same condition this
           // matchMedia checks), so each card is already a real 100vw slide
@@ -90,6 +101,8 @@ export function Process() {
               invalidateOnRefresh: true,
             },
           });
+
+          return () => normalizer?.kill();
         }
       );
     },
