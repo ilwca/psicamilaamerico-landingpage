@@ -62,7 +62,7 @@ export function Footer() {
 
           <div className="flex flex-col items-center gap-2 sm:items-end">
             <a
-              href="https://wa.me/556384928550"
+              href="https://wa.me/556384492226"
               target="_blank"
               rel="noopener noreferrer"
               className="font-body text-label-lg uppercase tracking-[0.05em] text-inverse-on-surface/80 transition hover:text-inverse-on-surface"
@@ -83,7 +83,7 @@ export function Footer() {
               Instagram
             </a>
           </div>
-        </div>
+        </div>556384928550
 
         <div className="mt-12 border-t border-inverse-on-surface/15 pt-6 text-center">
           <p className="font-body text-body-sm text-inverse-on-surface/60">

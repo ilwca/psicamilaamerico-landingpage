@@ -55,33 +55,28 @@ export function Process() {
       const track = trackRef.current;
       if (!viewport || !track) return;
 
-      // Pin + horizontal scrub now runs at every breakpoint, including
-      // mobile — the only thing that opts it out is prefers-reduced-motion,
-      // in which case it falls back to the plain vertical grid below. Every
-      // gsap.set()/tween created inside the callback below is automatically
-      // reverted the moment the condition stops matching, which restores
-      // the grid layout exactly as it was.
+      // Pin + horizontal scrub only runs at `lg:` (desktop) and only with no
+      // reduced-motion preference — mobile/touch always gets the plain
+      // vertical grid below. GSAP's pin repositions the track on the main
+      // thread in response to scroll events, which loses its lock against
+      // native touch scrolling (compositor-threaded, plus the address bar
+      // resizing the viewport mid-scroll), so trying to force it to hold on
+      // mobile (e.g. via ScrollTrigger.normalizeScroll) was unreliable in
+      // practice — simpler and more robust to just not pin on touch at all.
+      // Every gsap.set()/tween created inside the callback below is
+      // automatically reverted the moment either condition stops matching,
+      // which restores the grid layout exactly as it was.
       gsap.matchMedia().add(
         {
+          isDesktop: "(min-width: 1024px)",
           noMotionPreference: "(prefers-reduced-motion: no-preference)",
         },
         (context) => {
-          const { noMotionPreference } = context.conditions ?? {};
-          if (!noMotionPreference) return;
-
-          // Touch browsers drive scroll natively (compositor-threaded) and
-          // resize the viewport as the address bar shows/hides mid-scroll,
-          // both of which make GSAP's pin (which repositions the track on
-          // the main thread in response to scroll events) fall behind or
-          // lose its lock — the page keeps scrolling underneath instead of
-          // staying pinned. normalizeScroll funnels touch/wheel input
-          // through GSAP's own ticker instead, which is what makes the pin
-          // actually hold on mobile. Only enabled in this branch (and
-          // reverted below) since it's unnecessary overhead otherwise.
-          const normalizer = ScrollTrigger.normalizeScroll(true);
+          const { isDesktop, noMotionPreference } = context.conditions ?? {};
+          if (!isDesktop || !noMotionPreference) return;
 
           // The flex/w-screen/overflow-hidden layout switch is handled by
-          // the `motion-safe:*` classes below (same condition this
+          // the `lg:motion-safe:*` classes below (same conditions this
           // matchMedia checks), so each card is already a real 100vw slide
           // and `track` is already a `w-max` row by the time this runs —
           // GSAP only owns the scroll-scrubbed transform, not the layout.
@@ -101,8 +96,6 @@ export function Process() {
               invalidateOnRefresh: true,
             },
           });
-
-          return () => normalizer?.kill();
         }
       );
     },
@@ -161,10 +154,10 @@ export function Process() {
           viewport width (100vw), not the width of that centered, padded
           container. `pb-16 lg:pb-32` stands in for the section padding this
           part opted out of, so the overall vertical rhythm is unchanged. */}
-      <div ref={viewportRef} className="relative mt-12 w-full pb-16 motion-safe:overflow-hidden lg:pb-32">
+      <div ref={viewportRef} className="relative mt-12 w-full pb-16 lg:pb-32 lg:motion-safe:overflow-hidden">
         <ol
           ref={trackRef}
-          className="grid grid-cols-1 gap-16 motion-safe:flex motion-safe:w-max motion-safe:flex-nowrap motion-safe:gap-0"
+          className="grid grid-cols-1 gap-16 lg:motion-safe:flex lg:motion-safe:w-max lg:motion-safe:flex-nowrap lg:motion-safe:gap-0"
         >
           {STEPS.map((step, index) => (
             <motion.li
@@ -178,7 +171,7 @@ export function Process() {
                 ease: "easeOut",
                 delay: index * 0.1,
               }}
-              className="flex min-h-[80dvh] w-full shrink-0 items-center justify-center motion-safe:w-screen motion-safe:px-5 sm:motion-safe:px-12 lg:motion-safe:px-56"
+              className="flex min-h-[80dvh] w-full shrink-0 items-center justify-center lg:motion-safe:w-screen lg:motion-safe:px-56"
             >
               {/* Split from the <li> "slide": GSAP stretches the slide to
                   the full pinned viewport width at every breakpoint (only
@@ -193,7 +186,7 @@ export function Process() {
                   lifted there to let the card fill that padded width —
                   otherwise the two constraints would compound into a much
                   wider empty margin than intended. */}
-              <div className="glass-card relative flex min-h-[55vh] w-full max-w-5xl flex-col items-center justify-center rounded-[3rem] p-10 pt-16 text-center shadow-soft transition-transform duration-500 hover:-translate-y-2 sm:min-h-[60vh] sm:p-14 sm:pt-20 lg:min-h-[65vh] lg:p-16 lg:pt-24 motion-safe:max-w-none">
+              <div className="glass-card relative flex min-h-[55vh] w-full max-w-5xl flex-col items-center justify-center rounded-[3rem] p-10 pt-16 text-center shadow-soft transition-transform duration-500 hover:-translate-y-2 sm:min-h-[60vh] sm:p-14 sm:pt-20 lg:min-h-[65vh] lg:p-16 lg:pt-24 lg:motion-safe:max-w-none">
                 <span
                   aria-hidden="true"
                   className={`absolute -top-7 left-1/2 flex h-14 w-14 -translate-x-1/2 items-center justify-center rounded-full font-body text-label-lg shadow-soft sm:-top-8 sm:h-16 sm:w-16 sm:text-headline-sm lg:-top-10 lg:h-20 lg:w-20 lg:text-headline-md ${step.badgeClass}`}
@@ -230,7 +223,7 @@ export function Process() {
               distance in the pinned mode. */}
           <li
             aria-hidden="true"
-            className="hidden shrink-0 motion-safe:block motion-safe:w-[50vw]"
+            className="hidden shrink-0 lg:motion-safe:block lg:motion-safe:w-[50vw]"
           />
         </ol>
       </div>

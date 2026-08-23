@@ -76,7 +76,7 @@ export function Contact() {
           
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <a
-              href="https://wa.me/556384928550"
+              href="https://wa.me/556384492226"
               target="_blank"
               rel="noopener noreferrer"
               className="w-full rounded-full bg-surface px-9 py-4 font-body text-label-lg uppercase tracking-[0.05em] text-primary shadow-soft transition hover:-translate-y-1 hover:bg-surface-container-low sm:w-auto"
