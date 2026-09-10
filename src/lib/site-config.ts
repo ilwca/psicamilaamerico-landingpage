@@ -1,7 +1,7 @@
 // TODO: substituir pelo domínio de produção real antes do lançamento.
 // Nenhum domínio foi confirmado no projeto (sem README, .env ou config de
 // deploy apontando para um host) — este placeholder evita inventar uma URL.
-export const SITE_URL = "https://TODO-DEFINIR-DOMINIO.com.br";
+export const SITE_URL = "https://psicamilaamerico.com.br";
 
 export const SITE_NAME = "Camila Américo | Psicóloga Clínica";
 
