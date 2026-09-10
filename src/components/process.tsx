@@ -137,7 +137,7 @@ export function Process() {
           </footer>
         </motion.blockquote>
 
-        <motion.p
+        <motion.h2
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.4 }}
@@ -146,7 +146,7 @@ export function Process() {
           className="mt-24 text-center font-body text-label-lg uppercase tracking-[0.05em] text-primary sm:mt-28"
         >
           Como funciona
-        </motion.p>
+        </motion.h2>
       </div>
 
       {/* Deliberately outside the mx-auto max-w-[1140px] wrapper above: the

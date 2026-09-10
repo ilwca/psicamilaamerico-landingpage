@@ -83,7 +83,7 @@ export function Footer() {
               Instagram
             </a>
           </div>
-        </div>556384928550
+        </div>
 
         <div className="mt-12 border-t border-inverse-on-surface/15 pt-6 text-center">
           <p className="font-body text-body-sm text-inverse-on-surface/60">

@@ -2,6 +2,12 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
+import {
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_OG_IMAGE,
+  SITE_URL,
+} from "@/lib/site-config";
 
 const frunchy = localFont({
   src: "../fonts/Frunchy.ttf",
@@ -18,9 +24,31 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "Camila Américo | Psicóloga Clínica",
-  description:
-    "Camila Américo, psicóloga clínica mestra em Psicologia. Um espaço de escuta e cuidado para você se encontrar.",
+  metadataBase: new URL(SITE_URL),
+  title: SITE_NAME,
+  description: SITE_DESCRIPTION,
+  robots: {
+    index: true,
+    follow: true,
+  },
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    url: "/",
+    siteName: SITE_NAME,
+    locale: "pt_BR",
+    type: "website",
+    images: [SITE_OG_IMAGE],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    images: [SITE_OG_IMAGE.url],
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
